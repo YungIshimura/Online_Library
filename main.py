@@ -10,7 +10,7 @@ import argparse
 
 
 def parse_number_of_page():
-    response = requests.get("http://tululu.org/l55/1/")
+    response = requests.get("https://tululu.org/l55/1/")
     response.raise_for_status()
     soup = BeautifulSoup(response.text, "lxml")
     selector = "table div#content p.center a.npage:last-child"
@@ -84,7 +84,7 @@ def main():
         response = requests.get(book_url)
         soup = BeautifulSoup(response.text, "lxml")
         try:
-            # check_for_redirect(response)
+            check_for_redirect(response)
             book_author, book_name, comment, genre, image_tags = parse_book(soup)
             response.raise_for_status()
             if not args.skip_txt:
