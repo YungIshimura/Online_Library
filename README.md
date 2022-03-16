@@ -42,7 +42,7 @@ pip install -r requirements.txt
   
   # Сайт
   Сайт можно посмотреть [нажав вот прям сюда](https://yungishimura.github.io/Online_library/pages/index1.html).
-  Или же перейти по этой ссылке https://yungishimura.github.io/Online_Library/pages/index1.html
+  Или же перейти по этой ссылке https://yungishimura.github.io/Online_library/pages/index1.html
   Также скачав этот репозиторий сайтом можно пользоваться оффлайн.
   Для этого в правом верхнем углу нажмите на зелёную кнопку ```code``` и скачайте себе ```ZIP``` архив с репозиторием (как на скриншоте ниже).
   
