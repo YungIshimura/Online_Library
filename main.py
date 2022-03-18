@@ -78,8 +78,8 @@ def main():
     books_urls = get_book_url(args.start_page, args.end_page)
     book = []
     for book_url in books_urls:
-        book_number = ''.join(
-            [book_number for book_number in book_url if book_number.isdigit()]
+        book_id = ''.join(
+            [book_id for book_id in book_url if book_id.isdigit()]
             )
         response = requests.get(book_url)
         soup = BeautifulSoup(response.text, "lxml")
@@ -88,9 +88,9 @@ def main():
             book_author, book_name, comment, genres, image_link = parse_book(soup)
             response.raise_for_status()
             if not args.skip_txt:
-                txt_path = download_txt(book_name, book_number, args.books_folder)
+                txt_path = download_txt(book_name, book_id, args.books_folder)
             if not args.skip_imgs:
-                image_path = download_image(book_number,
+                image_path = download_image(book_id,
                                             book_name, image_link,
                                             args.images_folder)
             book.append(
