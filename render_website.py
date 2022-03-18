@@ -30,7 +30,7 @@ def render_page(template, directory="pages/", number_pages = 10):
     with open('books.json', 'r') as file:
         books_json = json.load(file)
     
-    books_chunked = list(chunked(chunked(json.loads(books_json), 2), number_pages))
+    books_chunked = list(chunked(chunked(books_json, 2), number_pages))
     file_names = [f"index{page+1}.html" for page in range(len(books_chunked))]
     
     for number, books in enumerate(books_chunked, start=1):
