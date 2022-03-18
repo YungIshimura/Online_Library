@@ -1,12 +1,14 @@
+import argparse
+import json
+import os
+import urllib
+import urllib.parse
+
 import requests
 from bs4 import BeautifulSoup
 from pathvalidate import sanitize_filename
-import urllib
+
 from parse_tululu_category import get_book_url
-import os
-import urllib.parse
-import json
-import argparse
 
 
 def parse_number_of_page():
