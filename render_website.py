@@ -28,7 +28,7 @@ def get_template():
 def render_page(template, directory="pages/", number_pages = 10):
     os.makedirs(directory, exist_ok=True)
     with open('books.json', 'r') as file:
-        books_json = file.read()
+        books_json = json.load(file)
     
     books_chunked = list(chunked(chunked(json.loads(books_json), 2), number_pages))
     file_names = [f"index{page+1}.html" for page in range(len(books_chunked))]
