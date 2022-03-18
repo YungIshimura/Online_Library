@@ -75,9 +75,9 @@ def main():
     end_page = parse_number_of_page()
     parser = create_parser(end_page)
     args = parser.parse_args()
-    books_url = get_book_url(args.start_page, args.end_page)
+    books_urls = get_book_url(args.start_page, args.end_page)
     book = []
-    for book_url in books_url:
+    for book_url in books_urls:
         book_number = ''.join(
             [book_number for book_number in book_url if book_number.isdigit()]
             )
@@ -85,13 +85,13 @@ def main():
         soup = BeautifulSoup(response.text, "lxml")
         try:
             check_for_redirect(response)
-            book_author, book_name, comment, genre, image_tags = parse_book(soup)
+            book_author, book_name, comment, genres, image_link = parse_book(soup)
             response.raise_for_status()
             if not args.skip_txt:
                 txt_path = download_txt(book_name, book_number, args.books_folder)
             if not args.skip_imgs:
                 image_path = download_image(book_number,
-                                            book_name, image_tags,
+                                            book_name, image_link,
                                             args.images_folder)
             book.append(
                 {"name": book_name,
@@ -99,7 +99,7 @@ def main():
                     "image": f"../{image_path}",
                     "txt": f"../{txt_path}",
                     "comment": comment,
-                    "genre": genre}
+                    "genre": genres}
             )
         except requests.HTTPError:
             print(f"Книга по ссылке {book_url} не найдена")
@@ -108,11 +108,11 @@ def main():
 
 
 def parse_book(soup):
-    selector = "table div#content h1 a"
-    book_author = soup.select_one(selector).get_text()
+    book_author_selector = "table div#content h1 a"
+    book_author = soup.select_one(book_author_selector).get_text()
 
-    selector = "table div#content h1"
-    book_tags = soup.select_one(selector).get_text().split()
+    book_name_selector = "table div#content h1"
+    book_tags = soup.select_one(book_name_selector).get_text().split()
     book_name = []
     for book_tag in book_tags:
         if book_tag != "::":
@@ -121,18 +121,18 @@ def parse_book(soup):
             book_name = " ".join(book_name)
             break
 
-    selector = "table div#content span.black"
-    comment_tags = soup.select(selector)
+    comments_selector = "table div#content span.black"
+    comment_tags = soup.select(comments_selector)
     comments = [comment_tag.get_text() for comment_tag in comment_tags]
 
-    selector = "table span.d_book a"
-    genre_tags = soup.select(selector)
-    genre = [genre.get_text() for genre in genre_tags]
+    genre_selector = "table span.d_book a"
+    genre_tags = soup.select(genre_selector)
+    genres = [genre.get_text() for genre in genre_tags]
 
-    selector = "table div#content img"
-    image_tags = soup.select_one(selector).attrs.get("src")
+    image_selector = "table div#content img"
+    image_link = soup.select_one(image_selector).attrs.get("src")
 
-    return book_author, book_name, comments, genre, image_tags
+    return book_author, book_name, comments, genres, image_link
 
 
 def download_txt(filename, book_id, directory):
