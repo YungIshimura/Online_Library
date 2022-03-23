@@ -9,6 +9,11 @@ from more_itertools import chunked
 def main():
     template = get_template()
     render_page(template)
+    rebuilt()
+    server = Server()
+    server.watch("template.html", main)
+    server.watch("index.html", rebuilt)
+    server.serve(root='.')
 
 
 def rebuilt():
@@ -25,16 +30,18 @@ def get_template():
     return template
 
 
-def render_page(template, directory="pages/", number_pages = 10):
+def render_page(template, directory="pages/", number_pages=10):
     os.makedirs(directory, exist_ok=True)
     with open('books.json', 'r') as file:
         books_json = json.load(file)
-    
+
     books_chunked = list(chunked(chunked(books_json, 2), number_pages))
     file_names = [f"index{page+1}.html" for page in range(len(books_chunked))]
-    
+
     for number, books in enumerate(books_chunked, start=1):
-        rendered_page = template.render(books=books, pages=file_names, page_number=number, number_pages=len(file_names))
+        rendered_page = template.render(books=books, pages=file_names,
+                                        page_number=number,     
+                                        number_pages=len(file_names))
         path = os.path.join(directory, f"index{number}.html")
         with open(path, "w") as file:
             file.write(rendered_page)
@@ -42,8 +49,3 @@ def render_page(template, directory="pages/", number_pages = 10):
 
 if __name__ == "__main__":
     main()
-    rebuilt()
-    server = Server()
-    server.watch("template.html", main)
-    server.watch("index.html", rebuild)
-    server.serve(root='.')
