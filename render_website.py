@@ -11,8 +11,8 @@ def main():
     render_page(template)
 
 
-def rebuild():
-    print("server rebuild")
+def rebuilt():
+    print("server rebuilt")
 
 
 def get_template():
@@ -42,7 +42,7 @@ def render_page(template, directory="pages/", number_pages = 10):
 
 if __name__ == "__main__":
     main()
-    rebuild()
+    rebuilt()
     server = Server()
     server.watch("template.html", main)
     server.watch("index.html", rebuild)
