@@ -78,7 +78,7 @@ def main():
     parser = create_parser(end_page)
     args = parser.parse_args()
     books_urls = get_book_url(args.start_page, args.end_page)
-    book = []
+    books = []
     for book_url in books_urls:
         book_id = ''.join(
             [book_id for book_id in book_url if book_id.isdigit()]
@@ -95,7 +95,7 @@ def main():
                 image_path = download_image(book_id,
                                             book_name, image_link,
                                             args.images_folder)
-            book.append(
+            books.append(
                 {"name": book_name,
                     "author": book_author,
                     "image": f"../{image_path}",
@@ -106,7 +106,7 @@ def main():
         except requests.HTTPError:
             print(f"Книга по ссылке {book_url} не найдена")
     with open(args.json_path, "a") as file:
-        json.dump(json.dumps(book, ensure_ascii=False), file, ensure_ascii=False, indent="")
+        json.dump(json.dumps(books, ensure_ascii=False), file, ensure_ascii=False, indent="")
 
 
 def parse_book(soup):
@@ -115,14 +115,14 @@ def parse_book(soup):
 
     book_name_selector = "table div#content h1"
     book_tags = soup.select_one(book_name_selector).get_text().split()
-    book_name = []
+    book_name = ""
     for book_tag in book_tags:
         if book_tag != "::":
-            book_name.append(book_tag)
+            book_name += book_tag
         else:
-            book_name = " ".join(book_name)
+            book_name = "".join(book_name)
             break
-
+    
     comments_selector = "table div#content span.black"
     comment_tags = soup.select(comments_selector)
     comments = [comment_tag.get_text() for comment_tag in comment_tags]
