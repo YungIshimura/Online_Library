@@ -106,7 +106,7 @@ def main():
         except requests.HTTPError:
             print(f"Книга по ссылке {book_url} не найдена")
     with open(args.json_path, "a") as file:
-        json.dump(books, file, ensure_ascii=False, indent="")
+        json.dump(str(books), file, ensure_ascii=False, indent="")
 
 
 def parse_book(soup):
