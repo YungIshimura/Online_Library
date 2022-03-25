@@ -114,13 +114,14 @@ def parse_book(soup):
     book_author = soup.select_one(book_author_selector).get_text()
 
     book_name_selector = "table div#content h1"
-    book_tags = soup.select_one(book_name_selector).get_text().split()
-    book_name = ""
-    for book_tag in book_tags:
-        if book_tag != "::":
-            book_name += book_tag
+    book_name_words = soup.select_one(book_name_selector).get_text().split()
+    
+    book_name = []
+    for book_name_word in book_name_words:
+        if book_name_word != "::":
+            book_name += book_name_word
         else:
-            book_name = "".join(book_name)
+            book_name = " ".join(book_name)
             break
     
     comments_selector = "table div#content span.black"
