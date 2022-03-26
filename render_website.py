@@ -9,15 +9,9 @@ from more_itertools import chunked
 def main():
     template = get_template()
     render_pages(template)
-    rebuild()
     server = Server()
-    server.watch('template.html', main)
-    server.watch('pages/*.html', rebuild)
-    server.serve(root='pages/')
-
-
-def rebuild():
-    print("server rebuilt")
+    server.watch('template.html', render_pages)
+    server.serve(root='.')
 
 
 def get_template():
@@ -45,6 +39,7 @@ def render_pages(template, directory="pages/", number_pages=10):
         path = os.path.join(directory, f"index{number}.html")
         with open(path, "w") as file:
             file.write(rendered_page)
+    print("server rebuilt")
 
 
 if __name__ == "__main__":
