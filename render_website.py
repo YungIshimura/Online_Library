@@ -10,7 +10,7 @@ def main():
     template = get_template()
     render_pages(template)
     server = Server()
-    server.watch('template.html', render_pages)
+    server.watch('template.html', lambda: render_pages(get_template()))
     server.serve(root='.')
 
 
